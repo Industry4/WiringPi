@@ -2724,7 +2724,9 @@ struct WPIWfiStatus waitForInterrupt2(int pin, int edgeMode, int ms, unsigned lo
   polls.events  = POLLIN | POLLPRI;
   polls.revents = 0;
 
+  do {
   ret = poll(&polls, 1, ms);
+  } while (ret < 0 && errno == EINTR && ms==-1);
   if (ret < 0) {
     if (wiringPiDebug) { 
       fprintf(stderr, "waitForInterrupt2: ERROR: poll returned=%d\n", ret);
